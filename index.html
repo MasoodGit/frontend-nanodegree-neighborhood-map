@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/style.css">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+        <div id="map-canvas"></div>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="neighborhood-selector">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Neighborhood" id="neighborhood">
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-info">Go</button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="bower_components/modernizr/modernizr.js"></script>
+        <script src="bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBSo8YPxxG3Bj8gpgSuU0BdSuHJt_FwQl8&libraries=places"></script>
+        <script src="bower_components/knockout/dist/knockout.js"></script>
+        <script>
+            // function initialize() {
+            //     var mapOptions = { 
+            //         center: { lat: 6.1714062, lng: 1.2466907 },
+            //         zoom: 12
+            //     };
+            //     var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+            // }
+            // google.maps.event.addDomListener(window, "load", initialize);
+        </script>
+        <script src="js/app.js"></script>
+    </body>
+</html>
