@@ -19,8 +19,23 @@ body {
 }
 
 .neighborhood-selector {
-    margin-top: 15px;
-    margin-left: auto;
-    margin-right: auto;
-    width: 20%;
+    margin-top: 30px;
+    margin-left: 15px;
+/*    margin-left: auto;
+    margin-right: auto;*/
+/*    width: 20%;
+*/}
+
+.place-info {
+    line-height: 1em;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.place-info .categories {
+    color: rgba(0, 0, 0, 0.7);
+}
+
+.place-info address {
+    color: grey;
 }
