@@ -2,7 +2,6 @@ var NeighborhoodViewModel = function (neighborhood) {
     var self = this;
 
     self.categories = ko.observableArray([]);
-    self.places = ko.observableArray([]);
     self.markers = ko.observableArray([]);
 
     self.neighborhood = { lat: 6.131944, lng: 1.222778 };
@@ -17,8 +16,21 @@ var NeighborhoodViewModel = function (neighborhood) {
 
         self.map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
-        self.getCategories(function () {
+        self.getCategories(function (categories) {
+            categories.forEach(function (category) {
+                category.places = ko.observableArray([]);
+
+                category.headerIcon = ko.computed(function () {
+                    var icon = category.icon;
+                    return icon.prefix + '44' + icon.suffix;
+                });
+            });
+
+            self.categories(categories);
+
             self.findPlaces(self.neighborhood);
+
+            console.log(self.categories());
 
             self.activateNeighborhoodSwitch();
         });
@@ -56,7 +68,7 @@ var NeighborhoodViewModel = function (neighborhood) {
             var content = '<div class="place-info"><h4>' + place.name + '</h4>';
             
             if (place.categories.length > 0) {
-                content += '<h5 class="categories">' + place.categories[0].pluralName;
+                content += '<h5 class="categories-titles">' + place.categories[0].pluralName;
                 for (var i = 1; i < place.categories.length; ++i) {
                     var category = place.categories[i];
                     content += ', ' + category.pluralName;
@@ -77,42 +89,115 @@ var NeighborhoodViewModel = function (neighborhood) {
             return new google.maps.InfoWindow({content: content});
         };
 
-        apis.foursquare.getPlacesNear(neighborhood, function (places) {
-            self.places(places);
-
-            console.log(self.places());
+        apis.foursquare.getPlacesIn(neighborhood, function (places) {
+            self.categories().forEach(function (category) {
+                category.places([]);
+            });
 
             self.markers([]);
-            self.places().forEach(function (place) {
-                var marker = new google.maps.Marker({
-                    map: self.map,
-                    title: place.name,
-                    position: {
-                        lat: place.location.lat,
-                        lng: place.location.lng
-                    }
-                });
 
-                google.maps.event.addListener(marker, 'click', function () {
-                    infoWindow(place).open(self.map, marker);
-                });
+            places.forEach(function (place) {
 
-                self.markers().push(marker);
+                apis.foursquare.getPhotosOf(place, function (photos) {
+
+                    place.photos = photos.items;
+
+                    place.thumbnail = ko.computed(function () {
+                        if (place.photos.length <= 0) {
+                            return '';
+                        }
+                        
+                        var photo = place.photos[0];
+
+                        return photo.prefix + '100x100' + photo.suffix;
+                    });
+
+                    place.categoryList =  ko.computed(function () {
+                        if (place.categories.length <= 0) {
+                            return '';
+                        }
+
+                        var list = place.categories[0].name;
+                        for (var i = 1; i < place.categories.length; ++i) {
+                            list += ', ' + place.categories[i];
+                        }
+
+                        return list;
+                    });
+
+                    self.categories().forEach(function (category) {
+                        if (self.isPlaceInCategory(category, place)) {                        
+                            category.places.push(place);
+                        }
+                    });
+
+                    var marker = new google.maps.Marker({
+                        map: self.map,
+                        title: place.name,
+                        position: {
+                            lat: place.location.lat,
+                            lng: place.location.lng
+                        }
+                    });
+
+                    google.maps.event.addListener(marker, 'click', function () {
+                        infoWindow(place).open(self.map, marker);
+                    });
+
+                    self.markers().push(marker);
+                });
             });
+
+            console.log(self.categories()[0].places());
         });
 
     };
 
-    self.getCategories = function (callback) {
-        apis.foursquare.getCategories(function (categories) {
-            self.categories(categories);
-        
-            console.log(self.categories());
-
-            if (callback) {
-                callback();
+    self.isPlaceInCategory = function (category, place) {
+        for (var i = 0; i < place.categories.length; ++i) {
+            if (self.isSubCategoryOf(category, place.categories[i])) {
+                return true;
             }
-        });
+        }
+
+        return false;
+    };
+
+    self.isSubCategoryOf = function (category, subcat) {
+        if (subcat.id === category.id) {
+            return true;
+        }
+        
+        if (category.hasOwnProperty('categories')) {
+            for (var i = 0; i < category.categories.length; ++i) {
+                if (self.isSubCategoryOf(category.categories[i], subcat)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    };
+
+    self.getCategories = function (callback) {
+        var fetch = Modernizr.localstorage && localStorage.getItem('categories') === null;
+
+        if (!fetch) {
+            if (callback) {
+                callback(JSON.parse(localStorage.getItem('categories')));
+            }
+
+        } else {
+            apis.foursquare.getCategories(function (categories) {
+                if (Modernizr.localstorage) {
+                    localStorage.setItem('categories', JSON.stringify(categories));
+                }
+
+                if (callback) {
+                    callback(categories);
+                }
+            });
+        }
     };
 
     google.maps.event.addDomListener(window, 'load', this.initialize);
