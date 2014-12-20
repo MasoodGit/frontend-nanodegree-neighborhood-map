@@ -3,7 +3,7 @@ html {
 }
 
 body {
-    font-family: Montserrat, Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Open Sans", RobotoDraft, Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
     height: 100%;
     margin: 0;
     padding: 0;
@@ -54,7 +54,7 @@ body {
     line-height: 1em;
     overflow: hidden;
     white-space: nowrap;
-    font-family: Montserrat, Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Open Sans", RobotoDraft, Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .place-info .categories-titles {
@@ -69,6 +69,7 @@ body {
     background-color: white;
     height: 800px;
     overflow-y: auto;
+    overflow-x: hidden;
     padding: 0;
     box-shadow: 0 10px 20px rgba(0,0,0,0.30), 0 6px 6px rgba(0,0,0,0.23);
 }
@@ -125,5 +126,9 @@ address {
 }
 
 .pac-container {
-    font-family: Montserrat, Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Open Sans", RobotoDraft, Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.pac-item {
+    padding: 4px;
 }

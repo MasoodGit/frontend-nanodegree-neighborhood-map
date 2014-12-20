@@ -11,11 +11,13 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-        <link href='http://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 
         <link rel="stylesheet" href="css/normalize.css">
         <link rel="stylesheet" href="css/main.css">
         <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/robotodraft.css">
         <link rel="stylesheet" href="css/style.css">
     </head>
     <body>
@@ -35,34 +37,34 @@
                     </div>
                 </div>
                 <div id="list-view" class="list-view col-md-offset-5 col-md-4">
-                        <ul class="categories" data-bind="foreach: categories">
-                            <li class="category" data-bind="visible: places().length > 0">
-                                <a data-toggle="collapse" data-bind="attr: { href: '#' + id, 'aria-controls': id }" data-parent="#list-view" aria-expanded="true">
-                                    <div class="category-header">
-                                        <span class="category-icon">
-                                            <img data-bind="attr: { src: headerIcon }">
-                                        </span>
-                                        <h4 class="category-title" data-bind="text: pluralName"></h4>
-                                    </div>
-                                </a>
-                                <ul class="places collapse in" data-bind="attr: { id: id }, foreach: places"> 
-                                    <li class="place">
-                                        <div class="row">
-                                            <div data-bind="visible: photos.length > 0" class="col-xs-3">
-                                                <img class="img-responsive" data-bind="attr: { src: thumbnail }">
-                                            </div>
-                                            <div class="col-xs-9">
-                                                <h5 data-bind="text: name"></h5>
-                                                <h6 data-bind="text: categoryList"></h6>
-                                                <address data-bind="visible: location.formattedAddress.length > 0, foreach: location.formattedAddress">
-                                                    <span data-bind="text: $data"></span><br>
-                                                </address>
-                                            </div>
+                    <ul class="categories" data-bind="foreach: categories">
+                        <li class="category" data-bind="visible: places().length > 0">
+                            <a data-toggle="collapse" data-bind="attr: { href: '#' + id, 'aria-controls': id }" data-parent="#list-view" aria-expanded="true">
+                                <div class="category-header">
+                                    <span class="category-icon">
+                                        <img data-bind="attr: { src: headerIcon }">
+                                    </span>
+                                    <h4 class="category-title" data-bind="text: pluralName"></h4>
+                                </div>
+                            </a>
+                            <ul class="places collapse in" data-bind="attr: { id: id }, foreach: places"> 
+                                <li class="place">
+                                    <div class="row">
+                                        <div data-bind="visible: photos.length > 0" class="col-xs-3">
+                                            <img class="img-responsive" data-bind="attr: { src: thumbnail }">
                                         </div>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
+                                        <div class="col-xs-9">
+                                            <h4 data-bind="text: name"></h4>
+                                            <h5 data-bind="text: categoryList"></h5>
+                                            <address data-bind="visible: location.formattedAddress.length > 0, foreach: location.formattedAddress">
+                                                <span data-bind="text: $data"></span><br>
+                                            </address>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>

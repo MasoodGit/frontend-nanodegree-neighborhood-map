@@ -1,17 +1,37 @@
-var NeighborhoodViewModel = function (neighborhood) {
+var NeighborhoodViewModel = function () {
     var self = this;
 
     self.categories = ko.observableArray([]);
     self.markers = ko.observableArray([]);
 
-    self.neighborhood = { lat: 6.131944, lng: 1.222778 };
+    // self.neighborhood = { 
+    //     name: 'Lomé',
+    //     location: {
+    //         lat: 6.131944, 
+    //         lng: 1.222778 
+    //     }
+    // };
+
+    self.neighborhood = {
+        name: ko.observable('Udacity'),
+        location: { 
+            lat: 37.399864, 
+            lng: -122.10840000000002 
+        }
+    };
+
     self.map = null;
 
     self.initialize = function () {
         var mapOptions = {
             disableDefaultUI: true, 
-            center: self.neighborhood,
-            zoom: 16
+            center: self.neighborhood.location,
+            zoom: 17,
+            zoomControl: true,
+            zoomControlOptions: {
+                position: google.maps.ControlPosition.LEFT_CENTER,
+                style: google.maps.ZoomControlStyle.DEFAULT
+            }
         };
 
         self.map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
@@ -29,8 +49,6 @@ var NeighborhoodViewModel = function (neighborhood) {
             self.categories(categories);
 
             self.findPlaces(self.neighborhood);
-
-            console.log(self.categories());
 
             self.activateNeighborhoodSwitch();
         });
@@ -50,7 +68,9 @@ var NeighborhoodViewModel = function (neighborhood) {
             var place = places[0];
             var location = place.geometry.location;
 
-            self.neighborhood = { lat: location.k, lng: location.D };
+            self.neighborhood.name(place.name);
+            self.neighborhood.location.lat = location.k;
+            self.neighborhood.location.lng =  location.D;
 
             self.switchNeighborhood(self.neighborhood);
         });
@@ -58,7 +78,7 @@ var NeighborhoodViewModel = function (neighborhood) {
 
 
     self.switchNeighborhood = function (neighborhood) {
-        self.map.panTo(neighborhood);
+        self.map.panTo(neighborhood.location);
         self.findPlaces(neighborhood);
     };
 
@@ -68,7 +88,7 @@ var NeighborhoodViewModel = function (neighborhood) {
             var content = '<div class="place-info"><h4>' + place.name + '</h4>';
             
             if (place.categories.length > 0) {
-                content += '<h5 class="categories-titles">' + place.categories[0].pluralName;
+                content += '<h5 class="categories-titles">' + place.categories[0].name;
                 for (var i = 1; i < place.categories.length; ++i) {
                     var category = place.categories[i];
                     content += ', ' + category.pluralName;
@@ -89,7 +109,7 @@ var NeighborhoodViewModel = function (neighborhood) {
             return new google.maps.InfoWindow({content: content});
         };
 
-        apis.foursquare.getPlacesIn(neighborhood, function (places) {
+        apis.foursquare.getPlacesIn(neighborhood.location, function (places) {
             self.categories().forEach(function (category) {
                 category.places([]);
             });
@@ -147,8 +167,6 @@ var NeighborhoodViewModel = function (neighborhood) {
                     self.markers().push(marker);
                 });
             });
-
-            console.log(self.categories()[0].places());
         });
 
     };
