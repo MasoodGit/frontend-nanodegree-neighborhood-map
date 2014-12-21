@@ -145,13 +145,7 @@ var NeighborhoodViewModel = function () {
                         return list;
                     });
 
-                    self.categories().forEach(function (category) {
-                        if (self.isPlaceInCategory(category, place)) {                        
-                            category.places.push(place);
-                        }
-                    });
-
-                    var marker = new google.maps.Marker({
+                    place.marker = new google.maps.Marker({
                         map: self.map,
                         title: place.name,
                         position: {
@@ -160,11 +154,38 @@ var NeighborhoodViewModel = function () {
                         }
                     });
 
-                    google.maps.event.addListener(marker, 'click', function () {
-                        infoWindow(place).open(self.map, marker);
+                    place.infoWindow = infoWindow(place);
+
+                    place.infoWindowOpened = ko.observable(false);
+
+                    place.openInfoWindow = function () {
+                        if (!this.infoWindowOpened()) {
+                            self.map.panTo(this.location);
+                            google.maps.event.trigger(this.marker, 'click');
+
+                            place.infoWindowOpened(true);
+                        }
+                    };
+
+                    google.maps.event.addListener(place.marker, 'click', function () {
+                        if (!place.infoWindowOpened()) {
+                            place.infoWindow.open(self.map, place.marker);
+
+                            place.infoWindowOpened(true);
+                        }
                     });
 
-                    self.markers().push(marker);
+                    google.maps.event.addListener(place.infoWindow, 'closeclick', function () {
+                        place.infoWindowOpened(false);
+                    });
+
+                    self.categories().forEach(function (category) {
+                        if (self.isPlaceInCategory(category, place)) {                        
+                            category.places.push(place);
+                        }
+                    });
+
+                    self.markers().push(place.marker);
                 });
             });
         });

@@ -108,12 +108,21 @@ body {
     border-top: 1px solid #ddd;
 }
 
+.place:hover {
+    background-color: #f5f9ff;
+}
+
+.activated {
+    background-color: #f5f9ff;
+}
+
 .place-content {
     width: 100%;
     padding: 10px;
 }
 
 .place-thumbnail {
+    border-radius: 50%;
 }
 
 .place-infos {
