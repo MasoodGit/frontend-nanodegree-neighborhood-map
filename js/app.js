@@ -2,7 +2,6 @@ var NeighborhoodViewModel = function () {
     var self = this;
 
     self.categories = ko.observableArray([]);
-    self.markers = ko.observableArray([]);
 
     // self.neighborhood = { 
     //     name: 'Lomé',
@@ -22,11 +21,15 @@ var NeighborhoodViewModel = function () {
 
     self.map = null;
 
+    self.searchBoxValue = ko.observable('');
+
+    self.query = ko.observable('');
+
     self.initialize = function () {
         var mapOptions = {
             disableDefaultUI: true, 
             center: self.neighborhood.location,
-            zoom: 17,
+            zoom: 18,
             zoomControl: true,
             zoomControlOptions: {
                 position: google.maps.ControlPosition.LEFT_CENTER,
@@ -37,8 +40,39 @@ var NeighborhoodViewModel = function () {
         self.map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
         self.getCategories(function (categories) {
+
             categories.forEach(function (category) {
+                category.isVisible = ko.observable(true);
+
+                category.isHidden = ko.computed(function () {
+                    return !category.isVisible();
+                });
+
+                category.toggle = function () {
+                    this.isVisible(!category.isVisible());
+
+                    this.places().forEach(function (place) {
+                        if (place.infoWindowOpened()) {
+                            place.infoWindow.close();
+                            place.infoWindowOpened(false);
+                        }
+
+                        place.marker.setVisible(!place.marker.getVisible());
+                    });
+                };
+
                 category.places = ko.observableArray([]);
+
+                category.visiblePlaces = ko.computed(function () {
+                    var places = [];
+                    category.places().forEach(function (place) {
+                        if (place.isVisible()) {
+                            places.push(place);
+                        }
+                    });
+
+                    return places;
+                });
 
                 category.headerIcon = ko.computed(function () {
                     var icon = category.icon;
@@ -61,18 +95,27 @@ var NeighborhoodViewModel = function () {
         google.maps.event.addListener(searchBox, 'places_changed', function () {
             var places = searchBox.getPlaces();
 
+            self.searchBoxValue('');
+
             if (places.length === 0) {
                 return;
             }
 
             var place = places[0];
-            var location = place.geometry.location;
 
-            self.neighborhood.name(place.name);
-            self.neighborhood.location.lat = location.k;
-            self.neighborhood.location.lng =  location.D;
+            if (place.hasOwnProperty('geometry')) {
+                var geometry = place.geometry;
 
-            self.switchNeighborhood(self.neighborhood);
+                if (geometry.hasOwnProperty('location')) {
+                    var location = geometry.location;
+
+                    self.neighborhood.name(place.name);
+                    self.neighborhood.location.lat = location.k;
+                    self.neighborhood.location.lng =  location.D;
+
+                    self.switchNeighborhood(self.neighborhood);
+                }
+            }
         });
     };
 
@@ -114,9 +157,11 @@ var NeighborhoodViewModel = function () {
                 category.places([]);
             });
 
-            self.markers([]);
-
             places.forEach(function (place) {
+
+                place.isVisible = ko.computed(function () {
+                    return place.name.substring(0, self.query().length).toLowerCase() === self.query().toLowerCase();
+                });
 
                 apis.foursquare.getPhotosOf(place, function (photos) {
 
@@ -145,47 +190,56 @@ var NeighborhoodViewModel = function () {
                         return list;
                     });
 
-                    place.marker = new google.maps.Marker({
-                        map: self.map,
-                        title: place.name,
-                        position: {
-                            lat: place.location.lat,
-                            lng: place.location.lng
-                        }
-                    });
-
                     place.infoWindow = infoWindow(place);
 
                     place.infoWindowOpened = ko.observable(false);
 
-                    place.openInfoWindow = function () {
-                        if (!this.infoWindowOpened()) {
-                            self.map.panTo(this.location);
-                            google.maps.event.trigger(this.marker, 'click');
+                    place.toggleInfoWindow = function () {
+                        if (this.infoWindowOpened()) {
+                            this.infoWindow.close();
 
-                            place.infoWindowOpened(true);
+                            this.infoWindowOpened(false);
+                        } else {
+                            self.map.panTo(this.location);
+                            
+                            this.infoWindow.open(self.map, this.marker);
+
+                            this.infoWindowOpened(true);
                         }
                     };
 
-                    google.maps.event.addListener(place.marker, 'click', function () {
-                        if (!place.infoWindowOpened()) {
-                            place.infoWindow.open(self.map, place.marker);
-
-                            place.infoWindowOpened(true);
-                        }
-                    });
-
-                    google.maps.event.addListener(place.infoWindow, 'closeclick', function () {
-                        place.infoWindowOpened(false);
-                    });
-
                     self.categories().forEach(function (category) {
-                        if (self.isPlaceInCategory(category, place)) {                        
+                        if (self.isPlaceInCategory(category, place)) {
+
+                            place.marker = new google.maps.Marker({
+                                map: self.map,
+                                title: place.name,
+                                position: {
+                                    lat: place.location.lat,
+                                    lng: place.location.lng
+                                },
+                                icon: markers[category.id]
+                            });
+
                             category.places.push(place);
                         }
                     });
 
-                    self.markers().push(place.marker);
+                    if (place.hasOwnProperty('marker')) {
+                        google.maps.event.addListener(place.marker, 'click', function () {
+                            if (!place.infoWindowOpened()) {
+                                place.infoWindow.open(self.map, place.marker);
+
+                                place.infoWindowOpened(true);
+
+                                document.getElementById(place.id).scrollIntoView();
+                            }
+                        });
+                    }
+
+                    google.maps.event.addListener(place.infoWindow, 'closeclick', function () {
+                        place.infoWindowOpened(false);
+                    });
                 });
             });
         });

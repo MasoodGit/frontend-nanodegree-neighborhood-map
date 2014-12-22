@@ -17,8 +17,6 @@
         <link rel="stylesheet" href="css/normalize.css">
         <link rel="stylesheet" href="css/main.css">
         <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
-        <link rel="stylesheet" href="css/robotodraft.css">
-        <link rel="stylesheet" href="css/sprites/sprite-action-white.css">
         <link rel="stylesheet" href="css/style.css">
     </head>
     <body>
@@ -30,48 +28,52 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-3">
-                    <div class="neighborhood-selector input-group">
-                        <input type="text" class="form-control" placeholder="Neighborhood" id="neighborhood">
-                        <span class="input-group-btn">
-                            <button type="button" class="btn btn-primary">Go</button>
-                        </span>
+                    <div class="neighborhood-selector">
+                        <input type="text" class="form-control" id="neighborhood" data-bind="attr: { placeholder: 'Neighborhood: ' + neighborhood.name() }, value: searchBoxValue">
                     </div>
                 </div>
-                <div id="list-view" class="list-view col-md-offset-5 col-md-4">
-                    <ul class="categories" data-bind="foreach: categories">
-                        <li class="category" data-bind="visible: places().length > 0">
-                            <a data-toggle="collapse" data-bind="attr: { href: '#' + id, 'aria-controls': id }" data-parent="#list-view" aria-expanded="true">
-                                <div class="category-header">
-                                    <span class="category-icon">
-                                        <img data-bind="attr: { src: headerIcon }">
-                                    </span>
-                                    <h4 class="category-title" data-bind="text: pluralName"></h4>
-                                </div>
-                            </a>
-                            <ul class="places collapse in" data-bind="attr: { id: id }, foreach: places"> 
-                                <li class="place" data-bind="click: openInfoWindow, css: { activated: infoWindowOpened }">
-                                    <div class="row">
-                                        <div data-bind="visible: photos.length > 0" class="col-xs-3">
-                                            <img class="img-responsive place-thumbnail" data-bind="attr: { src: thumbnail }">
-                                        </div>
-                                        <div data-bind="visible: photos.length == 0" class="col-xs-3">
-                                            <img class="img-responsive place-thumbnail" data-bind="attr: { src: 'http://placehold.it/100/3f51b5/ffffff&text=' + name.charAt(0).toUpperCase() }">
-                                        </div>
-                                        <div class="col-xs-9">
-                                            <h4 data-bind="text: name"></h4>
-                                            <h5 data-bind="text: categoryList"></h5>
-                                            <address data-bind="visible: location.formattedAddress.length > 0, foreach: location.formattedAddress">
-                                                <span data-bind="text: $data"></span><br>
-                                            </address>
-                                            <div class="place-more" data-bind="visible: infoWindowOpened">
-                                                <a href="#" data-bind="visible: photos.length > 0">Photos</a>
-                                            </div>
+                <div class="col-md-offset-5 col-md-4">
+                    <div class="filter-box">
+                        <input class="form-control input-lg" type="text" placeholder="Type a place name ..." data-bind="textInput: query">
+                    </div>
+                    <div class="list-view" id="list-view">
+                        <ul class="categories" data-bind="foreach: categories">
+                            <li class="category" data-bind="visible: visiblePlaces().length > 0">
+                                <a data-toggle="collapse" data-bind="attr: { href: '#' + id, 'aria-controls': id }" data-parent="#list-view" aria-expanded="true">
+                                    <div class="category-header" data-bind="style: { backgroundColor: colors[id] }">
+                                        <span class="category-icon">
+                                            <img data-bind="attr: { src: headerIcon }">
+                                        </span>
+                                        <h4 class="category-title" data-bind="text: pluralName"></h4>
+                                        <div class="toggle-visibility">
+                                            <span class="glyphicon glyphicon-eye-open" data-bind="visible: isVisible, click: toggle" aria-hidden="true"></span>
+                                            <span class="glyphicon glyphicon-eye-close" data-bind="visible: isHidden, click: toggle" aria-hidden="true"></span>
                                         </div>
                                     </div>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
+                                </a>
+                                <ul class="places collapse in" data-bind="attr: { id: id }, visible: isVisible, foreach: places"> 
+                                    <li class="place" data-bind="attr: { id: id }, click: toggleInfoWindow, css: { activated: infoWindowOpened }, visible: isVisible">
+                                        <div class="row">
+                                            <div class="col-xs-3">
+                                                <img class="img-responsive place-thumbnail" data-bind="visible: photos.length > 0, attr: { src: thumbnail }">
+                                                <img class="img-responsive place-thumbnail" data-bind="visible: photos.length <= 0, attr: { src: 'http://placehold.it/100/3f51b5/ffffff&text=' + name.charAt(0).toUpperCase() }">
+                                            </div>
+                                            <div class="col-xs-9">
+                                                <h4 data-bind="text: name"></h4>
+                                                <h5 data-bind="text: categoryList"></h5>
+                                                <address data-bind="visible: location.formattedAddress.length > 0, foreach: location.formattedAddress">
+                                                    <span data-bind="text: $data"></span><br>
+                                                </address>
+                                                <div class="place-more" data-bind="visible: infoWindowOpened">
+                                                    <a href="#" data-bind="visible: photos.length > 0">Photos</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -81,16 +83,7 @@
         <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBSo8YPxxG3Bj8gpgSuU0BdSuHJt_FwQl8&libraries=places"></script>
         <script src="bower_components/knockout/dist/knockout.js"></script>
-        <script>
-            // function initialize() {
-            //     var mapOptions = { 
-            //         center: { lat: 6.1714062, lng: 1.2466907 },
-            //         zoom: 12
-            //     };
-            //     var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
-            // }
-            // google.maps.event.addDomListener(window, "load", initialize);
-        </script>
+        <script src="js/values.js"></script>
         <script src="js/apis.js"></script>
         <script src="js/app.js"></script>
     </body>
