@@ -54,6 +54,7 @@ var NeighborhoodViewModel = function () {
                     this.places().forEach(function (place) {
                         if (place.infoWindowOpened()) {
                             place.infoWindow.close();
+                            place.marker.setIcon(place.markerIcon);
                             place.infoWindowOpened(false);
                         }
 
@@ -209,12 +210,16 @@ var NeighborhoodViewModel = function () {
 
                     place.toggleInfoWindow = function () {
                         if (this.infoWindowOpened()) {
+                            place.marker.setIcon(place.markerIcon);
+
                             this.infoWindow.close();
 
                             this.infoWindowOpened(false);
                         } else {
                             self.map.panTo(this.location);
-                            
+
+                            place.marker.setIcon(place.markerIcon.substring(0, place.markerIcon.length - 4) + '_selected.png');
+
                             this.infoWindow.open(self.map, this.marker);
 
                             this.infoWindowOpened(true);
@@ -223,6 +228,7 @@ var NeighborhoodViewModel = function () {
 
                     self.categories().forEach(function (category) {
                         if (self.isPlaceInCategory(category, place)) {
+                            place.markerIcon = markers[category.id];
 
                             place.marker = new google.maps.Marker({
                                 map: self.map,
@@ -231,7 +237,7 @@ var NeighborhoodViewModel = function () {
                                     lat: place.location.lat,
                                     lng: place.location.lng
                                 },
-                                icon: markers[category.id]
+                                icon: place.markerIcon
                             });
 
                             category.places.push(place);
@@ -241,8 +247,13 @@ var NeighborhoodViewModel = function () {
 
                     if (place.hasOwnProperty('marker')) {
                         google.maps.event.addListener(place.marker, 'click', function () {
+
                             if (!place.infoWindowOpened()) {
                                 place.infoWindow.open(self.map, place.marker);
+
+                                var icon = place.marker.getIcon();
+                                
+                                place.marker.setIcon(icon.substring(0, icon.length - 4) + '_selected.png');
 
                                 place.infoWindowOpened(true);
 
@@ -252,6 +263,7 @@ var NeighborhoodViewModel = function () {
                     }
 
                     google.maps.event.addListener(place.infoWindow, 'closeclick', function () {
+                        place.marker.setIcon(place.markerIcon);
                         place.infoWindowOpened(false);
                     });
                 });
