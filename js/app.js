@@ -48,7 +48,7 @@ var NeighborhoodViewModel = function () {
                     return !category.isVisible();
                 });
 
-                category.toggle = function () {
+                category.toggleVisibility = function () {
                     this.isVisible(!category.isVisible());
 
                     this.places().forEach(function (place) {
@@ -57,18 +57,20 @@ var NeighborhoodViewModel = function () {
                             place.infoWindowOpened(false);
                         }
 
-                        place.marker.setVisible(!place.marker.getVisible());
+                        if (place.matchesQuery()) {
+                            place.marker.setVisible(!place.marker.getVisible());
+                        }
                     });
                 };
 
                 category.places = ko.observableArray([]);
 
-                category.visiblePlaces = ko.computed(function () {
+                category.placesMatchingQuery = ko.computed(function () {
                     var places = [];
                     category.places().forEach(function (place) {
-                        place.marker.setVisible(place.isVisible());
+                        place.marker.setVisible(place.matchesQuery());
 
-                        if (place.isVisible()) {
+                        if (place.matchesQuery()) {
                             places.push(place);
                         }
                     });
@@ -161,8 +163,16 @@ var NeighborhoodViewModel = function () {
 
             places.forEach(function (place) {
 
-                place.isVisible = ko.computed(function () {
-                    return place.name.substring(0, self.query().length).toLowerCase() === self.query().toLowerCase();
+                place.matchesQuery = ko.computed(function () {
+                    var query = self.query().toLowerCase();
+
+                    for (var i = 0; i < place.categories.length; ++i) {
+                        if (place.categories[i].name.toLowerCase().search(query) != -1) {
+                            return true;
+                        }
+                    }
+
+                    return place.name.substring(0, query.length).toLowerCase() === query;
                 });
 
 
@@ -180,7 +190,7 @@ var NeighborhoodViewModel = function () {
                         return photo.prefix + '100x100' + photo.suffix;
                     });
 
-                    place.categoryList =  ko.computed(function () {
+                    place.formattedCategories =  ko.computed(function () {
                         if (place.categories.length <= 0) {
                             return '';
                         }
@@ -225,6 +235,7 @@ var NeighborhoodViewModel = function () {
                             });
 
                             category.places.push(place);
+                            place.categories.push(category);
                         }
                     });
 

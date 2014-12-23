@@ -34,11 +34,11 @@
                 </div>
                 <div class="col-md-offset-5 col-md-4">
                     <div class="filter-box">
-                        <input class="form-control input-lg" type="text" placeholder="Type a place name ..." data-bind="textInput: query">
+                        <input class="form-control input-lg" type="text" placeholder="Search ... (e.g arts, fast-food, ... or type a place name)" data-bind="textInput: query">
                     </div>
                     <div class="list-view" id="list-view">
                         <ul class="categories" data-bind="foreach: categories">
-                            <li class="category" data-bind="visible: visiblePlaces().length > 0">
+                            <li class="category" data-bind="visible: placesMatchingQuery().length > 0">
                                 <a data-toggle="collapse" data-bind="attr: { href: '#' + id, 'aria-controls': id }" data-parent="#list-view" aria-expanded="true">
                                     <div class="category-header" data-bind="style: { backgroundColor: colors[id] }">
                                         <span class="category-icon">
@@ -46,13 +46,13 @@
                                         </span>
                                         <h4 class="category-title" data-bind="text: pluralName"></h4>
                                         <div class="toggle-visibility">
-                                            <span class="glyphicon glyphicon-eye-open" data-bind="visible: isVisible, click: toggle" aria-hidden="true"></span>
-                                            <span class="glyphicon glyphicon-eye-close" data-bind="visible: isHidden, click: toggle" aria-hidden="true"></span>
+                                            <span class="glyphicon glyphicon-eye-open" data-bind="visible: isVisible, click: toggleVisibility" aria-hidden="true"></span>
+                                            <span class="glyphicon glyphicon-eye-close" data-bind="visible: isHidden, click: toggleVisibility" aria-hidden="true"></span>
                                         </div>
                                     </div>
                                 </a>
                                 <ul class="places collapse in" data-bind="attr: { id: id }, visible: isVisible, foreach: places"> 
-                                    <li class="place" data-bind="attr: { id: id }, click: toggleInfoWindow, css: { activated: infoWindowOpened }, visible: isVisible">
+                                    <li class="place" data-bind="attr: { id: id }, click: toggleInfoWindow, css: { activated: infoWindowOpened }, visible: matchesQuery">
                                         <div class="row">
                                             <div class="col-xs-3">
                                                 <img class="img-responsive place-thumbnail" data-bind="visible: photos.length > 0, attr: { src: thumbnail }">
@@ -60,7 +60,7 @@
                                             </div>
                                             <div class="col-xs-9">
                                                 <h4 data-bind="text: name"></h4>
-                                                <h5 data-bind="text: categoryList"></h5>
+                                                <h5 data-bind="text: formattedCategories"></h5>
                                                 <address data-bind="visible: location.formattedAddress.length > 0, foreach: location.formattedAddress">
                                                     <span data-bind="text: $data"></span><br>
                                                 </address>
