@@ -21,23 +21,23 @@ var colors = {
 }
 
 var markers = {
-	'4d4b7105d754a06374d81259': '../img/food_marker.png', // Food
+	'4d4b7105d754a06374d81259': 'img/food_marker.png', // Food
 
-	'4d4b7105d754a06376d81259': '../img/nightlife_marker.png', // Nightlife
+	'4d4b7105d754a06376d81259': 'img/nightlife_marker.png', // Nightlife
 
-	'4d4b7105d754a06377d81259': '../img/exterior_marker.png', // Exterior
+	'4d4b7105d754a06377d81259': 'img/exterior_marker.png', // Exterior
 
-	'4d4b7105d754a06375d81259': '../img/workplace_marker.png', // Workplace
+	'4d4b7105d754a06375d81259': 'img/workplace_marker.png', // Workplace
 
-	'4e67e38e036454776db1fb3a': '../img/home_marker.png', // Home
+	'4e67e38e036454776db1fb3a': 'img/home_marker.png', // Home
 
-	'4d4b7105d754a06378d81259': '../img/shopping_marker.png', // Shopping
+	'4d4b7105d754a06378d81259': 'img/shopping_marker.png', // Shopping
 
-	'4d4b7105d754a06379d81259': '../img/travel_marker.png', // Travel
+	'4d4b7105d754a06379d81259': 'img/travel_marker.png', // Travel
 
-	'4d4b7104d754a06370d81259': '../img/culture_marker.png', // Culture
+	'4d4b7104d754a06370d81259': 'img/culture_marker.png', // Culture
 
-	'4d4b7105d754a06372d81259': '../img/education_marker.png', // Education
+	'4d4b7105d754a06372d81259': 'img/education_marker.png', // Education
 
-	'4d4b7105d754a06373d81259': '../img/event_marker.png' // Event
+	'4d4b7105d754a06373d81259': 'img/event_marker.png' // Event
 };

@@ -66,6 +66,8 @@ var NeighborhoodViewModel = function () {
                 category.visiblePlaces = ko.computed(function () {
                     var places = [];
                     category.places().forEach(function (place) {
+                        place.marker.setVisible(place.isVisible());
+
                         if (place.isVisible()) {
                             places.push(place);
                         }
@@ -162,6 +164,7 @@ var NeighborhoodViewModel = function () {
                 place.isVisible = ko.computed(function () {
                     return place.name.substring(0, self.query().length).toLowerCase() === self.query().toLowerCase();
                 });
+
 
                 apis.foursquare.getPhotosOf(place, function (photos) {
 
