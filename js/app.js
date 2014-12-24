@@ -191,6 +191,17 @@ var NeighborhoodViewModel = function () {
                         return photo.prefix + '100x100' + photo.suffix;
                     });
 
+                    for (var i = 0; i < place.photos.length; ++i) {
+                        var photo = place.photos[i];
+
+                        photo.position = i;
+                        photo.placeId = place.id;
+
+                        photo.preview = ko.computed(function () {
+                            return photo.prefix + '500x500' + photo.suffix;
+                        });
+                    }
+
                     place.formattedCategories =  ko.computed(function () {
                         if (place.categories.length <= 0) {
                             return '';
