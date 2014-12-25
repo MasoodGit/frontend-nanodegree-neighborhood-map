@@ -157,6 +157,11 @@ a.hide-list-view:hover {
     padding: 10px;
 }
 
+.timeframe {
+    color: rgba(0, 0, 0, 0.7);
+    font-size: 12px;
+}
+
 .place-thumbnail {
     border-radius: 50%;
 }

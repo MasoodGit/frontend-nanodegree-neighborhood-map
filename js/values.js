@@ -1,3 +1,5 @@
+var days = ['None', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
 var colors = {
 	'4d4b7105d754a06374d81259': '#f44336', // Food
 

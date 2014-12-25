@@ -34,6 +34,13 @@ apis.foursquare = {
             this.get('photos', endpoint, successCallback, errorCallback);
         },
 
+        getHoursOf: function (place, successCallback, errorCallback) {
+            var endpoint = 'https://api.foursquare.com/v2/venues/' + place.id + '/hours?client_id='
+                + this.clientId + '&client_secret=' + this.clientSecret + '&v=20140806&m=foursquare';
+
+            this.get('hours', endpoint, successCallback, errorCallback);
+        },
+
         get: function(resource, endpoint, successCallback, errorCallback) {
             $.get(endpoint)
                 .done(function (data) {

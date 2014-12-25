@@ -156,6 +156,26 @@ var NeighborhoodViewModel = function () {
                 content += '</address>';
             }
 
+            if (place.hasOwnProperty('hours')) {
+
+                place.hours.timeframes.forEach(function (timeframe) {
+                    content += '<div class="timeframe">';
+
+                    var days = timeframe.daysOpen[0];
+
+                    for (var i = 1; i < timeframe.daysOpen.length; ++i) {
+                        days += ' - ' + timeframe.daysOpen[i];
+                    }
+
+                    content += '<p>' + days + '</p>';
+                    content += '<p>' + timeframe.open.start + ' - ' + timeframe.open.end + '</p>';
+
+                    content += '</div>';
+
+                });
+                
+            }
+
             content += '</div>';
 
             return new google.maps.InfoWindow({content: content});
@@ -219,68 +239,95 @@ var NeighborhoodViewModel = function () {
                         return list;
                     });
 
-                    place.infoWindow = infoWindow(place);
+                    apis.foursquare.getHoursOf(place, function (hours) {
 
-                    place.infoWindowOpened = ko.observable(false);
+                        console.log(hours);
 
-                    place.toggleInfoWindow = function () {
-                        if (this.infoWindowOpened()) {
-                            place.marker.setIcon(place.markerIcon);
+                        var formatHour = function (hour) {
+                            return hour.substring(0, 2) + ' h ' + hour.substring(2);
+                        };
 
-                            this.infoWindow.close();
+                        if (hours.hasOwnProperty('timeframes')) {
+                            hours.timeframes.forEach(function (timeframe) {
+                                if (timeframe.hasOwnProperty('days')) {
+                                    timeframe.daysOpen = [];
 
-                            this.infoWindowOpened(false);
-                        } else {
-                            self.map.panTo(this.location);
+                                    timeframe.days.forEach(function (day) {
+                                        timeframe.daysOpen.push(days[day]);
+                                    });
 
-                            place.marker.setIcon(place.markerIcon.substring(0, place.markerIcon.length - 4) + '_selected.png');
-
-                            this.infoWindow.open(self.map, this.marker);
-
-                            this.infoWindowOpened(true);
-                        }
-                    };
-
-                    self.categories().forEach(function (category) {
-                        if (self.isPlaceInCategory(category, place)) {
-                            place.markerIcon = markers[category.id];
-
-                            place.marker = new google.maps.Marker({
-                                map: self.map,
-                                title: place.name,
-                                position: {
-                                    lat: place.location.lat,
-                                    lng: place.location.lng
-                                },
-                                icon: place.markerIcon
+                                    timeframe.open.start = formatHour(timeframe.open[0].start);
+                                    timeframe.open.end = formatHour(timeframe.open[0].end);
+                                }
                             });
 
-                            category.places.push(place);
-                            place.categories.push(category);
+                            place.hours = hours;
                         }
-                    });
 
-                    if (place.hasOwnProperty('marker')) {
-                        google.maps.event.addListener(place.marker, 'click', function () {
+                        place.infoWindow = infoWindow(place);
 
-                            if (!place.infoWindowOpened()) {
-                                place.infoWindow.open(self.map, place.marker);
+                        place.infoWindowOpened = ko.observable(false);
 
-                                var icon = place.marker.getIcon();
-                                
-                                place.marker.setIcon(icon.substring(0, icon.length - 4) + '_selected.png');
+                        place.toggleInfoWindow = function () {
+                            if (this.infoWindowOpened()) {
+                                place.marker.setIcon(place.markerIcon);
 
-                                place.infoWindowOpened(true);
+                                this.infoWindow.close();
 
-                                document.getElementById(place.id).scrollIntoView();
+                                this.infoWindowOpened(false);
+                            } else {
+                                self.map.panTo(this.location);
+
+                                place.marker.setIcon(place.markerIcon.substring(0, place.markerIcon.length - 4) + '_selected.png');
+
+                                this.infoWindow.open(self.map, this.marker);
+
+                                this.infoWindowOpened(true);
+                            }
+                        };
+
+                        self.categories().forEach(function (category) {
+                            if (self.isPlaceInCategory(category, place)) {
+                                place.markerIcon = markers[category.id];
+
+                                place.marker = new google.maps.Marker({
+                                    map: self.map,
+                                    title: place.name,
+                                    position: {
+                                        lat: place.location.lat,
+                                        lng: place.location.lng
+                                    },
+                                    icon: place.markerIcon
+                                });
+
+                                category.places.push(place);
+                                place.categories.push(category);
                             }
                         });
-                    }
 
-                    google.maps.event.addListener(place.infoWindow, 'closeclick', function () {
-                        place.marker.setIcon(place.markerIcon);
-                        place.infoWindowOpened(false);
-                    });
+                        if (place.hasOwnProperty('marker')) {
+                            google.maps.event.addListener(place.marker, 'click', function () {
+
+                                if (!place.infoWindowOpened()) {
+                                    place.infoWindow.open(self.map, place.marker);
+
+                                    var icon = place.marker.getIcon();
+                                    
+                                    place.marker.setIcon(icon.substring(0, icon.length - 4) + '_selected.png');
+
+                                    place.infoWindowOpened(true);
+
+                                    document.getElementById(place.id).scrollIntoView();
+                                }
+                            });
+                        }
+
+                        google.maps.event.addListener(place.infoWindow, 'closeclick', function () {
+                            place.marker.setIcon(place.markerIcon);
+                            place.infoWindowOpened(false);
+                        });
+
+                        });
                 });
             });
         });
