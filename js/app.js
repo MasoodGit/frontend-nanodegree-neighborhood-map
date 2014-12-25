@@ -333,4 +333,6 @@ var NeighborhoodViewModel = function () {
     google.maps.event.addDomListener(window, 'load', this.initialize);
 };
 
-ko.applyBindings(new NeighborhoodViewModel("Lomé, TOGO"));
+$(document).ready(function () {
+   ko.applyBindings(new NeighborhoodViewModel()); 
+});

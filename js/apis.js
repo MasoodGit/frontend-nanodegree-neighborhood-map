@@ -1,5 +1,7 @@
-var apis = {
-    foursquare: {
+var apis = {};
+
+
+apis.foursquare = {
         clientId: 'GQVM3TG2JHRG53PTWCZSCQDKUKQJH34I1BUOJOLLHOSBL1Q0',
 
         clientSecret: 'M41YZKEES3UIG4QYWVMQ0HQIMUPD0G1YD5ZSQTYUPJLVG4DD',
@@ -49,5 +51,8 @@ var apis = {
                     }
                 });
         }
-    }
+    };
+
+apis.mediawiki = {
+
 };

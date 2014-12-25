@@ -36,7 +36,6 @@ body {
 .neighborhood-selector,
 .neighborhood-name {
     margin-top: 30px;
-    margin-left: 15px;
     border-radius: 0;
     box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
 
@@ -65,30 +64,45 @@ body {
     color: grey;
 }
 
+.sidebar {
+    margin-top: 15px;
+    padding: 0;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.30), 0 6px 6px rgba(0,0,0,0.23);
+}
+
+.sidebar-title {
+    text-align: center;
+    background-color: #3f51b5;
+    color: #fff;
+    padding: 5px;
+}
+
+.hide-list-view {
+    cursor: pointer;
+}
+
+a.hide-list-view:hover {
+    text-decoration: initial;
+}
+
 .filter-box {
     padding: 10px;
-    margin-right: 15px;
 }
 
 .filter-box input {
     border-radius: 0;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.30), 0 6px 6px rgba(0,0,0,0.23);
-
-}
-
-.filter-box input:focus {
-    box-shadow: 0 10px 20px rgba(0,0,0,0.30), 0 6px 6px rgba(0,0,0,0.23);
 }
 
 .list-view {
     background-color: white;
-    height: 680px;
+    width: 100%;
+    height: 600px;
     overflow-y: auto;
     overflow-x: hidden;
-    margin-top: 15px;
-    margin-right: 15px;
-    padding: 0;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.30), 0 6px 6px rgba(0,0,0,0.23);
+}
+
+.list-view.collapsing {
+
 }
 
 .categories,
@@ -111,6 +125,9 @@ body {
     background-color: transparent;
     color: #fff;
     font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .category-title {
