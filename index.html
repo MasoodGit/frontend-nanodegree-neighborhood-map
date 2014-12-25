@@ -39,10 +39,10 @@
                                 <h2>Places</h2>
                             </div>
                         </a>
+                        <div class="filter-box">
+                            <input class="form-control input-lg" type="text" placeholder="Search ... (e.g arts, fast-food, ... or type a place name)" data-bind="textInput: query">
+                        </div>
                         <div id="list-view" class="list-view">
-                            <div class="filter-box">
-                                <input class="form-control input-lg" type="text" placeholder="Search ... (e.g arts, fast-food, ... or type a place name)" data-bind="textInput: query">
-                            </div>
                             <ul class="categories" data-bind="foreach: categories">
                                 <li class="category" data-bind="visible: placesMatchingQuery().length > 0">
                                     <a data-toggle="collapse" data-bind="attr: { href: '#' + id, 'aria-controls': id }" data-parent="#list-view" aria-expanded="true">

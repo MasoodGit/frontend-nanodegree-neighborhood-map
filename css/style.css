@@ -87,6 +87,7 @@ a.hide-list-view:hover {
 
 .filter-box {
     padding: 10px;
+    background-color: white;
 }
 
 .filter-box input {
