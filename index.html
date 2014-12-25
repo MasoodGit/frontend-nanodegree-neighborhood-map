@@ -50,8 +50,8 @@
                                             <span class="category-icon">
                                                 <img data-bind="attr: { src: headerIcon, alt: name }">
                                             </span>
-                                            <div class="category-title">
-                                                <h4 data-bind="text: pluralName"></h4>
+                                            <div class="category-title" data-toggle-"tooltip" data-placement="bottom" data-bind="attr: { title: pluralName }">
+                                                <h4 data-bind="text: displayName"></h4>
                                             </div>
                                             <div class="toggle-visibility">
                                                 <span class="glyphicon glyphicon-eye-open" data-bind="visible: isVisible, click: toggleVisibility" aria-hidden="true"></span>
