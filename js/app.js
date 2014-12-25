@@ -85,7 +85,7 @@ var NeighborhoodViewModel = function () {
                 });
 
                 category.displayName = ko.computed(function () {
-                    return category.pluralName.length > 22 ? category.pluralName.substring(0, 18) + ' ...' : category.pluralName;
+                    return category.pluralName.length > 22 ? category.pluralName.substring(0, 18) + ' \u2026' : category.pluralName;
                 });
             });
 
