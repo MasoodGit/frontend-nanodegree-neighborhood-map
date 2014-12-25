@@ -1,11 +1,13 @@
+// Days names to associate to each index. 1 -> Mon, 2 -> Tue etc.
 var days = ['None', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
+// Hexadecimal color values to associate to each category id.
 var colors = {
 	'4d4b7105d754a06374d81259': '#f44336', // Food
 
 	'4d4b7105d754a06376d81259': '#e91e63', // Nightlife
 
-	'4d4b7105d754a06377d81259': '#673ab7', // Exterior
+	'4d4b7105d754a06377d81259': '#673ab7', // Outdoor
 
 	'4d4b7105d754a06375d81259': '#009688', // Workplace
 
@@ -22,12 +24,13 @@ var colors = {
 	'4d4b7105d754a06373d81259': '#9e9e9e' // Event
 }
 
+// Marker image URLs to associate to each category id.
 var markers = {
 	'4d4b7105d754a06374d81259': 'img/food_marker.png', // Food
 
 	'4d4b7105d754a06376d81259': 'img/nightlife_marker.png', // Nightlife
 
-	'4d4b7105d754a06377d81259': 'img/exterior_marker.png', // Exterior
+	'4d4b7105d754a06377d81259': 'img/exterior_marker.png', // Outdoor
 
 	'4d4b7105d754a06375d81259': 'img/workplace_marker.png', // Workplace
 
