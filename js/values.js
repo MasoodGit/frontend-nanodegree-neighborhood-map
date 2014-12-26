@@ -46,3 +46,6 @@ var markers = {
 
     '4d4b7105d754a06373d81259': 'img/event_marker.png' // Event
 };
+
+// Cache to preload marker icons.
+var markersCache = {};

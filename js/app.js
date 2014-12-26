@@ -584,6 +584,13 @@ var NeighborhoodViewModel = function () {
                                     icon: place.markerIcon
                                 });
 
+                                // Preload the marker icon for the selected state of the place
+                                // to avoid display delays.
+                                if (!markersCache.hasOwnProperty(category.id)) {
+                                    markersCache[category.id] = new Image();
+                                    markersCache[category.id].src = place.markerIcon.substring(0, place.markerIcon.length - 4) + '_selected.png';
+                                }
+
                                 // Binds the place to this category.
                                 category.places.push(place);
                                 place.categories.push(category);
