@@ -163,6 +163,15 @@ var NeighborhoodViewModel = function () {
                         // insert it into the result.
                         if (match) {
                             places.push(place);
+                        } else {
+                            // If the place does not match the query and
+                            // has his info window opened before the user
+                            // starts the query, close the info window.
+                            if (place.infoWindowOpened()) {
+                                place.infoWindow.close();
+                                place.marker.setIcon(place.markerIcon);
+                                place.infoWindowOpened(false);
+                            }
                         }
                     });
 
@@ -358,6 +367,7 @@ var NeighborhoodViewModel = function () {
                  * @return {boolean} Whether the place matches the search query.
                  */
                 place.matchesQuery = ko.computed(function () {
+
                     var query = self.searchInputValue().toLowerCase();
 
                     for (var i = 0; i < place.categories.length; ++i) {
