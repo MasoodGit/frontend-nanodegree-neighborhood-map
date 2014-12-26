@@ -5,7 +5,7 @@ Web application which uses Foursquare API and Google Maps API to find interestin
 There is a live version of the app at http://ftchirou.github.io/frontend-nanodegree-neighborhood-map/
 
 ## How to run
-You will need a http server in order to run the app. A little server can be started if you have python installed.
+You will need an http server in order to run the app. A little server can be started if you have python installed.
 
 In a terminal, ```cd``` in the project directory and type
 
@@ -24,7 +24,7 @@ At the top left in the app, there is an input box. Type in the name of a neighbo
 
 On the right, there is a list view showing interesting places in the neighborhood. The places are displayed by category (e.g. food, nightlife, education, ...).
 
-* The list of places can be filtered by the input box on top of the list. Type in a type of place (e.g. food, fast-food, bar, ...) or type directly a place name. The list will be filtered as you type to show only the places matching the query.
+* The list of places can be filtered by the input box on top of the list. Type in a type of place (e.g. food, fast-food, bar, etc) or type directly a place name. The list will be filtered as you type to show only the places matching the query.
 * Click on a category name to collapse the list of its places.
 * Click on the *eye icon* next to a category name to hide its places in the list view and on the map.
 * Click on a list view item to select a place and to display the info window of that place on the map.
