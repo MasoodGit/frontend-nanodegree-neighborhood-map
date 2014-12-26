@@ -12,7 +12,7 @@
 
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
         <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
-        <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
 
         <link rel="stylesheet" href="css/normalize.css">
         <link rel="stylesheet" href="css/main.css">
@@ -26,6 +26,19 @@
 
         <div id="map-canvas"></div>
         <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-offset-5 col-md-2">
+                    <div class="loading-box" data-bind="visible: loading">
+                        <span>Loading ...</span>
+                    </div>
+                    <div style="display: none" class="error-box" data-bind="visible: error">
+                        <span>An error occured. Please reload the page.</span>
+                    </div>
+                    <div style="display: none" class="message-box" data-bind="visible: !hasPlaces()">
+                        <span>No places found.</span>
+                    </div>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-md-2">
                     <div class="neighborhood-selector">

@@ -12,6 +12,18 @@ var NeighborhoodViewModel = function () {
     var self = this;
 
     /**
+     * Whether the app is loading and searching for places.
+     * @type {boolean}
+     */
+    self.loading = ko.observable(true);
+
+    /**
+     * Whether an error occured during an API call.
+     * @type {boolean}
+     */
+    self.error = ko.observable(false);
+
+    /**
      * The neighborhood the user is exploring.
      * @type {object}
      */
@@ -55,6 +67,12 @@ var NeighborhoodViewModel = function () {
      * @type {Array.<object>}
      */
     self.categories = ko.observableArray([]);
+
+    /**
+     * Whether this neighborhood has at least one place or not.
+     * @type {Array.<object>}
+     */
+    self.hasPlaces = ko.observable(true);
 
     /**
      * Initializes the app.
@@ -237,6 +255,18 @@ var NeighborhoodViewModel = function () {
         var searchBox = new google.maps.places.SearchBox(input);
 
         google.maps.event.addListener(searchBox, 'places_changed', function () {
+            // Clear each category's places array before switching to another neighborhood.
+            self.categories().forEach(function (category) {
+
+                // Remove the markers from the map.
+                category.places().forEach(function (place) {
+                    place.marker.setMap(null);
+                    place.marker = null;
+                });
+
+                category.places([]);
+            });
+
             /**
              * The list of places matching the neighborhood entered by the user.
              * Generally, this list is composed of only 1 element.
@@ -294,6 +324,12 @@ var NeighborhoodViewModel = function () {
      */
     self.findPlaces = function (neighborhood) {
 
+        // Notify that the app is searching for places.
+        self.loading(true);
+
+        // We suppose that places will be found.
+        self.hasPlaces(true);
+
         /**
          * Builds a place info window to be shown when the place's marker is clicked.
          * @param {object} place The place to build the info window for.
@@ -350,11 +386,14 @@ var NeighborhoodViewModel = function () {
 
         // Retrieves the places in the given neighborhood using the Foursquare API.
         apis.foursquare.getPlacesIn(neighborhood.location, function (places) {
-            // Once the places have been retrieved, clear each category's places
-            // array.
-            self.categories().forEach(function (category) {
-                category.places([]);
-            });
+            if (places.length <= 0) {
+                self.hasPlaces(false);
+                self.loading(false);
+
+                return;
+            }
+            
+            self.hasPlaces(true);
 
             // For each retrieved place
             places.forEach(function (place) {
@@ -575,10 +614,13 @@ var NeighborhoodViewModel = function () {
                             place.infoWindowOpened(false);
                         });
 
-                    });
-                });
+                        // We have retrieved all the places.
+                        self.loading(false);
+                    }, self.handleError);
+                }, self.handleError);
             });
-        });
+        
+        }, self.handleError);
 
     };
 
@@ -653,8 +695,18 @@ var NeighborhoodViewModel = function () {
                 if (callback) {
                     callback(categories);
                 }
-            });
+            }, self.handleError);
         }
+    };
+
+    /**
+     * Notifies that there was an error in an API call.
+     * @param {object} error The error returned by the API.
+     * @return {void}
+     */
+    self.handleError = function (error) {
+        console.log(error);
+        self.error(true);
     };
 
     // Initialize the app once the DOM is loaded.

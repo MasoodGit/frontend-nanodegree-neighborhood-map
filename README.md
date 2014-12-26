@@ -20,7 +20,7 @@ on Windows
 Then browse to http://127.0.0.1:8000 and Voilà!
 
 ## Usage
-At the top left in the app, there is an input box. Type in the name of a neighborhood you'd like to visit (e.g. *Shinjuku Station*) and the app will switch to that neighborhood.
+At the top left in the app, there is an input box. Type in the name of a neighborhood you'd like to visit (e.g. *Shinjuku*) and the app will switch to that neighborhood.
 
 On the right, there is a list view showing interesting places in the neighborhood.
 
