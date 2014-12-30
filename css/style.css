@@ -133,8 +133,10 @@ a.hide-list-view:hover {
     overflow-x: hidden;
 }
 
-.list-view.collapsing {
-
+@media (max-height: 768px) {
+    .list-view {
+        height: 360px;
+    }
 }
 
 .categories,
