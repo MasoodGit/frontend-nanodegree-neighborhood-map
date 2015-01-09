@@ -24,6 +24,12 @@ var NeighborhoodViewModel = function () {
     self.error = ko.observable(false);
 
     /**
+     * The error to be displayed to the user if self.error equals true.
+     * @type {string}
+     */
+    self.errorText = ko.observable('');
+
+    /**
      * The neighborhood the user is exploring.
      * @type {object}
      */
@@ -81,6 +87,7 @@ var NeighborhoodViewModel = function () {
      * @return {void}
      */
     self.initialize = function () {
+
         var mapOptions = {
             disableDefaultUI: true, 
             center: self.neighborhood.location,
@@ -714,13 +721,26 @@ var NeighborhoodViewModel = function () {
     self.handleError = function (error) {
         if (error) {
             console.log(error);
+
+            if (typeof error === 'object') {
+                self.errorText('Can not retrieve places. Please reload the page.');
+
+            } else if (typeof error === 'string') {
+                self.errorText(error);
+            }
         }
-        
+
         self.error(true);
     };
 
-    // Initialize the app once the DOM is loaded.
-    google.maps.event.addDomListener(window, 'load', this.initialize);
+
+    // Initialize the app once the DOM and the Google Maps API is successfully loaded. If not, display an error.
+    if (typeof google === 'object' && typeof google.maps === 'object' 
+            && typeof google.maps.event === 'object' && typeof google.maps.places === 'object') {
+        google.maps.event.addDomListener(window, 'load', this.initialize);
+    } else {
+        self.handleError('Can not load the map. Please reload the page.');
+    }
 };
 
 $(document).ready(function () {

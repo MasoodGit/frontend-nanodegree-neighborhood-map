@@ -13,6 +13,7 @@
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
         <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Raleway:400,700' rel='stylesheet' type='text/css'>
 
         <link rel="stylesheet" href="css/normalize.css">
         <link rel="stylesheet" href="css/main.css">
@@ -32,10 +33,11 @@
                         <span>Loading ...</span>
                     </div>
                     <div style="display: none" class="error-box" data-bind="visible: error">
-                        <span>An error occured. Please reload the page.</span>
+                        <!-- <span>An error occured. Please reload the page.</span> -->
+                        <p data-bind="text: errorText"></p>
                     </div>
                     <div style="display: none" class="message-box" data-bind="visible: !hasPlaces()">
-                        <span>No places found.</span>
+                        <span>No places found around </span><span data-bind="text: neighborhood.name"></span></span>.</span>
                     </div>
                 </div>
             </div>
