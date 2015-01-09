@@ -94,6 +94,9 @@ apis.foursquare = {
                         errorCallback({errorType: meta.errorType, errorDetail: meta.errorDetail});
                     }
                 }
+            })
+            .fail(function () {
+                errorCallback();
             });
     }
 };

@@ -712,7 +712,10 @@ var NeighborhoodViewModel = function () {
      * @return {void}
      */
     self.handleError = function (error) {
-        console.log(error);
+        if (error) {
+            console.log(error);
+        }
+        
         self.error(true);
     };
 
