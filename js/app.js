@@ -725,7 +725,7 @@ var NeighborhoodViewModel = function () {
             console.log(error);
 
             if (typeof error === 'object') {
-                self.errorText('Can not retrieve places. Please reload the page.');
+                self.errorText('Can not retrieve all the places. Please reload the page.');
 
             } else if (typeof error === 'string') {
                 self.errorText(error);

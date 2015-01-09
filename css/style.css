@@ -151,9 +151,15 @@ a.hide-list-view:hover {
     list-style-type: none;
 }
 
+.category a:hover,
+.category a:focus,
+.category a:active {
+    text-decoration: none;
+}
+
 .category-header {
     position: relative;
-    display: block;
+    display: flex;
     padding: 10px 15px 10px 15px;
     width: 100%;
     padding: 10px;
@@ -166,7 +172,7 @@ a.hide-list-view:hover {
 }
 
 .category-title {
-    display: inline-block;
+    flex-grow: 2;
     margin-top: 0;
     margin-bottom: 0;
     padding-left: 5px;
@@ -205,8 +211,6 @@ a.hide-list-view:hover {
 }
 
 .toggle-visibility {
-    display: inline-block;
-    float: right !important;
     font-size: 16px;
     padding: 10px;
 }
