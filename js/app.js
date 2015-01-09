@@ -719,6 +719,8 @@ var NeighborhoodViewModel = function () {
      * @return {void}
      */
     self.handleError = function (error) {
+        self.loading(false);
+        
         if (error) {
             console.log(error);
 
