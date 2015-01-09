@@ -294,8 +294,8 @@ var NeighborhoodViewModel = function () {
                     var location = geometry.location;
 
                     self.neighborhood.name(place.name);
-                    self.neighborhood.location.lat = location.k;
-                    self.neighborhood.location.lng =  location.D;
+                    self.neighborhood.location.lat = location.lat();
+                    self.neighborhood.location.lng =  location.lng();
 
                     // Switch to the updated neighborhood.
                     self.switchNeighborhood(self.neighborhood);
