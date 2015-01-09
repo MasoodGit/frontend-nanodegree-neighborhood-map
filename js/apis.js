@@ -96,7 +96,7 @@ apis.foursquare = {
                 }
             })
             .fail(function () {
-                errorCallback();
+                errorCallback('Can not retrieve places. Please reload the page.');
             });
     }
 };
