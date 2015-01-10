@@ -152,7 +152,7 @@ var NeighborhoodViewModel = function () {
                             // the place matches the current user search query
                             // because the marker is already hidden if the place
                             // does not match the search query.
-                            place.marker.setVisible(!place.marker.getVisible());
+                            place.marker.setVisible(category.isVisible());
                         }
                     });
                 };
@@ -182,7 +182,7 @@ var NeighborhoodViewModel = function () {
                         // Toggle the place's marker visibility.
                         // The marker is visible if the place matches the query
                         // and hidden if not.
-                        place.marker.setVisible(match);
+                        place.marker.setVisible(match && category.isVisible());
 
                         // If the place matches the user search query,
                         // insert it into the result.
