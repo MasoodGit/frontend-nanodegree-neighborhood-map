@@ -11,8 +11,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-        <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
-        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
         <link href='http://fonts.googleapis.com/css?family=Raleway:400,700' rel='stylesheet' type='text/css'>
 
         <link rel="stylesheet" href="css/normalize.css">
@@ -132,6 +130,9 @@
                                 </li>
                             </ul>
                         </div>
+                        <div id="collapse-list-view">
+                            <span id="collapse-list-view-button" class="glyphicon glyphicon-chevron-up"></span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -146,10 +147,31 @@
         <script src="js/app.js"></script>
         <script>
             // Toggle the visibility of the list view.
+            var listView = $('.list-view');
             var listViewVisible = true;
-            $('.hide-list-view').click(function () {
+            var collapse = $('#collapse-list-view');
+
+            collapse.click(function () {
                 listViewVisible = !listViewVisible;
-                $('.list-view').css('display', listViewVisible ? 'block' : 'none');
+                // $('.list-view').css('display', listViewVisible ? 'block' : 'none');
+
+                var button = $('#collapse-list-view-button');
+
+                if (listViewVisible) {
+                    listView.slideDown();
+
+                    button.removeClass('glyphicon-chevron-down');
+                    button.addClass('glyphicon-chevron-up');
+
+                    collapse.attr('title', 'Hide the list view.');
+                } else {
+                    listView.slideUp();
+                    
+                    button.removeClass('glyphicon-chevron-up');
+                    button.addClass('glyphicon-chevron-down');
+
+                    collapse.attr('title', 'Show the list view.');
+                }
             });
         </script>
     </body>

@@ -137,7 +137,7 @@ var NeighborhoodViewModel = function () {
                     this.places().forEach(function (place) {
 
                         if (place.infoWindowOpened()) {
-                            // Close the place's info indow.
+                            // Close the place's info window.
                             place.infoWindow.close();
 
                             // Set the place marker icon to its default icon.
