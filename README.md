@@ -32,3 +32,8 @@ The places are displayed by category (e.g. food, nightlife, education, ...):
 * Click on a list view item to select a place and to display the info window of that place on the map. Click again to deselect it.
 * When a place is selected, if there are photos of the place available, you can click on the *Photos* link to display a slideshow of the photos.
 * Click on the title of the list view (*Places*) to hide it.
+
+## How to build
+It is possible to build a production version of the app using gulp. For that, run the build task ```gulp build```.
+
+After the task completes, a production version ready to be delivered will be available in the ```build``` directory.
